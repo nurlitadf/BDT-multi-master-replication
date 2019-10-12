@@ -153,9 +153,9 @@
          sudo service mysql restart
 
          # Cluster bootstrapping
-         sudo mysql -u root -p admin < /vagrant/cluster_bootstrap.sql
-         sudo mysql -u root -p admin < /vagrant/addition_to_sys.sql
-         sudo mysql -u root -p admin < /vagrant/create_proxysql_user.sql
+         sudo mysql -u root -padmin < /vagrant/cluster_bootstrap.sql
+         sudo mysql -u root -padmin < /vagrant/addition_to_sys.sql
+         sudo mysql -u root -padmin < /vagrant/create_proxysql_user.sql
         ```
        
         * DB2 (deployMySQL12.sh)
