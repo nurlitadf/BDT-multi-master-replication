@@ -7,7 +7,7 @@
 
    * Gambar Infrastruktur
   
-   ![alt text](https://github.com/nurlitadf/BDT-multi-master-replication/blob/master/ets.png "Gambar Infrastuktur")
+   ![alt text](/ets.png "Gambar Infrastuktur")
     
    * Jumlah Server
     
@@ -57,7 +57,9 @@
    
      1. Menginisialisasi Vagrantfile
      
-        `vagrant init`
+        ```bash
+        vagrant init
+        ```
         
         Lalu Vagrantfile diisi sebagai berikut:
         
@@ -115,7 +117,7 @@
      
      2. Membuat Script Provision
         * DB1 (deployMySQL11.sh)
-        ```
+        ```bash
                  # Changing the APT sources.list to kambing.ui.ac.id
          sudo cp '/vagrant/sources.list' '/etc/apt/sources.list'
 
@@ -159,7 +161,7 @@
         ```
        
         * DB2 (deployMySQL12.sh)
-        ```
+        ```bash
         # Changing the APT sources.list to kambing.ui.ac.id
          sudo cp '/vagrant/sources.list' '/etc/apt/sources.list'
 
@@ -200,7 +202,7 @@
          sudo mysql -u root -padmin < /vagrant/cluster_member.sql
         ```
         * DB3 (deployMySQL13.sh)
-        ```
+        ```bash
         # Changing the APT sources.list to kambing.ui.ac.id
          sudo cp '/vagrant/sources.list' '/etc/apt/sources.list'
 
@@ -271,11 +273,13 @@
      3. Membuat File Konfigurasi SQL
         * Generate gtid
         
-        `uuidgen`
+        ```
+        uuidgen
+        ```
         
         Lalu masukkan pada `loose-group_replication_group_name` di semua file konfigurasi.
         * db1 (my11.cnf)
-        ```
+        ```ini
         #
          # The MySQL database server configuration file.
          #
@@ -332,7 +336,7 @@
          loose-group_replication_local_address = "192.168.16.92:33061"
         ```
         * db2 (my12.cnf)
-        ```
+        ```ini
         #
          # The MySQL database server configuration file.
          #
@@ -389,7 +393,7 @@
          loose-group_replication_local_address = "192.168.16.93:33061"
         ```
         * db3 (my13.cnf)
-        ```
+        ```ini
         #
          # The MySQL database server configuration file.
          #
@@ -447,7 +451,7 @@
         ```
      4. Membuat File Script SQL
         * Patch script untuk ProxySQL (addition_to_sys.sql)
-        ```
+        ```sql
          USE sys;
 
          DELIMITER $$
@@ -540,11 +544,11 @@
          START GROUP_REPLICATION;
          SET GLOBAL group_replication_bootstrap_group=OFF;
 
-         CREATE DATABASE colata;
+         CREATE DATABASE mybuffet;
 
         ```
         * Konfigurasi MySQL group replication pada db lainnya (cluster_member.sql)
-        ```
+        ```sql
          SET SQL_LOG_BIN=0;
          CREATE USER 'repl'@'%' IDENTIFIED BY 'password' REQUIRE SSL;
          GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%';
@@ -554,13 +558,121 @@
          INSTALL PLUGIN group_replication SONAME 'group_replication.so';
         ```
         * Membuat user pada ProxySQL (create_proxysql_user.sql)
-        ```
+        ```sql
          CREATE USER 'monitor'@'%' IDENTIFIED BY 'monitorpassword';
          GRANT SELECT on sys.* to 'monitor'@'%';
          FLUSH PRIVILEGES;
 
-         CREATE USER 'colatauser'@'%' IDENTIFIED BY '123';
-         GRANT ALL PRIVILEGES on colata.* to 'colatauser'@'%';
+         CREATE USER 'mybuffet'@'%' IDENTIFIED BY '123';
+         GRANT ALL PRIVILEGES on mybuffet.* to 'mybuffet'@'%';
          FLUSH PRIVILEGES;
         ```
-        
+
+   * Menjalankan Vagrant
+     
+     Jalankan command
+     ```bash
+     vagrant up
+     ```
+     Cek status vagrant dengan menjalankan command
+     ```bash
+     vagrant status
+     ```
+     Akan didapatkan tampilan sebagai berikut
+     ![Vagrant Status](/status.png)
+     Masuk ke proxy dengan menjalankan command
+     ```bash
+     vagrant ssh proxy
+     ```
+     ![Proxy](/proxy.png)
+     Lalu masuk ke mysql dan jalankan command berikut untuk memasukkan user dan daftar server agar dikenali proxy
+     ```bash
+     mysql -u admin -padmin -h 127.0.0.1 -P 6032 < /vagrant/proxysql.sql
+     ```
+## Penggunaan Basis Data Terdistribusi dalam Aplikasi
+
+### Konfigurasi aplikasi tambahan
+* Masuk ke folder project `my-buffet`
+* Ubah .env pada project aplikasi pada bagian
+  ```ini
+  DB_CONNECTION=mysql
+  DB_HOST=192.168.16.95
+  DB_PORT=6033
+  DB_DATABASE=mybuffet
+  DB_USERNAME=mybuffet
+  DB_PASSWORD=123
+  ```
+  `DB_HOST` diisi dengan ip proxysql
+
+  `DB_USERNAME` diisi dengan username yang telah dibuat pada file `proxysql.sql`
+* Jalankan command berikut untuk mempersiapkan aplikasi
+  ```
+  composer install
+  php artisan key:generate
+  php artisan migrate:fresh
+  ```
+  ![alt](/aplikasi.png)
+* Untuk menjalankan aplikasi
+  ```
+  php artisan serve
+  ```
+  Lalu buka `127.0.0.1:8000`
+
+  ![alt](/mybuffet.png)
+
+### Deskripsi Aplikasi
+MyBuffet adalah sebuah aplikasi untuk menjual makanan hotel dengan harga yang lebih murah karena sudah melewati jam operasional hotel. Aplikasi ini berbasis web dan menggunakan framework Laravel dengan MySQL sebagai databasenya.
+
+## Simulasi Fail Over
+### Mematikan Salah Satu Server Database
+* Matikan db3
+  Buka db3
+  ```bash
+  vagrant ssh db3
+  ```
+  Matikan MySQL
+  ```bash
+  sudo service mysql stop
+  sudo service mysql status
+  ```
+  ![alt](/stop.png)
+  Keluar dari db3 lalu buka proxy
+  ```bash
+  vagrant ssh proxy
+  ```
+  Lalu masuk ke MySQL dengan command
+  ```
+  mysql -u admin -ppassword -h 127.0.0.1 -P 6032 --prompt='ProxySQLAdmin>'
+  ```
+  Kemudian jalankan query MySQL
+  ```sql
+  SELECT hostgroup_id, hostname, status FROM runtime_mysql_servers;
+  ```
+  ![alt](/proxystop.png)
+  Pada gambar di atas, ip milik proxy `192.168.16.94` memiliki status `SHUNNED`
+  
+### Mencoba Insert Data
+![alt](/insert.png)
+### Menjalankan Kembali MySQL pada db3
+* Masuk ke db3
+  ```bash
+  vagrant ssh db3
+  ```
+* Nyalakan MySQL
+  ```bash
+  sudo service mysql start
+  sudo service mysql status
+  ```
+  ![alt](/startsql.png)
+* Masuk ke mysql
+  ```bash
+  mysql -u mybuffet -p123
+  ```
+  ![alt](/mysql.png)
+* Jalankan query berikut untuk mengecek apakah data terreplikasi
+  ```sql
+  use mybuffet;
+  select * from menu_restaurants \G;
+  ```
+  ![alt](/replikasi.png)
+  Pada gambar diatas terlihat bahwa isi database pada server db3 sudah sama dengan data terakhir pada aplikasi.
