@@ -243,7 +243,7 @@
          sudo mysql -u root -padmin < /vagrant/cluster_member.sql
         ```
         * ProxySQL/Load Balancer (deployProxySQL.sh)
-        ```
+        ```bash
         # Changing the APT sources.list to kambing.ui.ac.id
          sudo cp '/vagrant/sources.list' '/etc/apt/sources.list'
 
@@ -531,7 +531,7 @@
 
         ```
         * Bootstrapping MySQL group replication, dijalankan hanya pada DB1 (cluster_bootstrap.sql)
-        ```
+        ```sql
          SET SQL_LOG_BIN=0;
          CREATE USER 'repl'@'%' IDENTIFIED BY 'password' REQUIRE SSL;
          GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%';
