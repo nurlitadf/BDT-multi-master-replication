@@ -115,7 +115,7 @@
      
      2. Membuat Script Provision
         * DB1 (deployMySQL11.sh)
-        ```
+        ```bash
                  # Changing the APT sources.list to kambing.ui.ac.id
          sudo cp '/vagrant/sources.list' '/etc/apt/sources.list'
 
@@ -159,7 +159,7 @@
         ```
        
         * DB2 (deployMySQL12.sh)
-        ```
+        ```bash
         # Changing the APT sources.list to kambing.ui.ac.id
          sudo cp '/vagrant/sources.list' '/etc/apt/sources.list'
 
@@ -200,7 +200,7 @@
          sudo mysql -u root -padmin < /vagrant/cluster_member.sql
         ```
         * DB3 (deployMySQL13.sh)
-        ```
+        ```bash
         # Changing the APT sources.list to kambing.ui.ac.id
          sudo cp '/vagrant/sources.list' '/etc/apt/sources.list'
 
@@ -241,7 +241,7 @@
          sudo mysql -u root -padmin < /vagrant/cluster_member.sql
         ```
         * ProxySQL/Load Balancer (deployProxySQL.sh)
-        ```
+        ```bash
         # Changing the APT sources.list to kambing.ui.ac.id
          sudo cp '/vagrant/sources.list' '/etc/apt/sources.list'
 
@@ -275,7 +275,7 @@
         
         Lalu masukkan pada `loose-group_replication_group_name` di semua file konfigurasi.
         * db1 (my11.cnf)
-        ```
+        ```ini
         #
          # The MySQL database server configuration file.
          #
@@ -332,7 +332,7 @@
          loose-group_replication_local_address = "192.168.16.92:33061"
         ```
         * db2 (my12.cnf)
-        ```
+        ```ini
         #
          # The MySQL database server configuration file.
          #
@@ -389,7 +389,7 @@
          loose-group_replication_local_address = "192.168.16.93:33061"
         ```
         * db3 (my13.cnf)
-        ```
+        ```ini
         #
          # The MySQL database server configuration file.
          #
@@ -447,7 +447,7 @@
         ```
      4. Membuat File Script SQL
         * Patch script untuk ProxySQL (addition_to_sys.sql)
-        ```
+        ```sql
          USE sys;
 
          DELIMITER $$
@@ -527,7 +527,7 @@
 
         ```
         * Bootstrapping MySQL group replication, dijalankan hanya pada DB1 (cluster_bootstrap.sql)
-        ```
+        ```sql
          SET SQL_LOG_BIN=0;
          CREATE USER 'repl'@'%' IDENTIFIED BY 'password' REQUIRE SSL;
          GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%';
@@ -544,7 +544,7 @@
 
         ```
         * Konfigurasi MySQL group replication pada db lainnya (cluster_member.sql)
-        ```
+        ```sql
          SET SQL_LOG_BIN=0;
          CREATE USER 'repl'@'%' IDENTIFIED BY 'password' REQUIRE SSL;
          GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%';
@@ -554,7 +554,7 @@
          INSTALL PLUGIN group_replication SONAME 'group_replication.so';
         ```
         * Membuat user pada ProxySQL (create_proxysql_user.sql)
-        ```
+        ```sql
          CREATE USER 'monitor'@'%' IDENTIFIED BY 'monitorpassword';
          GRANT SELECT on sys.* to 'monitor'@'%';
          FLUSH PRIVILEGES;
