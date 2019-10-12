@@ -7,7 +7,7 @@
 
    * Gambar Infrastruktur
   
-   ![alt text](/ets.png "Gambar Infrastuktur")
+   ![Gambar Infrastuktur](images/ets.png)
     
    * Jumlah Server
     
@@ -579,12 +579,12 @@
      vagrant status
      ```
      Akan didapatkan tampilan sebagai berikut
-     ![Vagrant Status](/status.png)
+     ![Vagrant Status](images/status.png)
      Masuk ke proxy dengan menjalankan command
      ```bash
      vagrant ssh proxy
      ```
-     ![Proxy](/proxy.png)
+     ![Proxy](/images/proxy.png)
      Lalu masuk ke mysql dan jalankan command berikut untuk memasukkan user dan daftar server agar dikenali proxy
      ```bash
      mysql -u admin -padmin -h 127.0.0.1 -P 6032 < /vagrant/proxysql.sql
@@ -611,14 +611,14 @@
   php artisan key:generate
   php artisan migrate:fresh
   ```
-  ![alt](/aplikasi.png)
+  ![alt](/images/aplikasi.png)
 * Untuk menjalankan aplikasi
   ```
   php artisan serve
   ```
   Lalu buka `127.0.0.1:8000`
 
-  ![alt](/mybuffet.png)
+  ![alt](/images/mybuffet.png)
 
 ### Deskripsi Aplikasi
 MyBuffet adalah sebuah aplikasi untuk menjual makanan hotel dengan harga yang lebih murah karena sudah melewati jam operasional hotel. Aplikasi ini berbasis web dan menggunakan framework Laravel dengan MySQL sebagai databasenya.
@@ -635,7 +635,7 @@ MyBuffet adalah sebuah aplikasi untuk menjual makanan hotel dengan harga yang le
   sudo service mysql stop
   sudo service mysql status
   ```
-  ![alt](/stop.png)
+  ![alt](/images/stop.png)
   Keluar dari db3 lalu buka proxy
   ```bash
   vagrant ssh proxy
@@ -648,11 +648,11 @@ MyBuffet adalah sebuah aplikasi untuk menjual makanan hotel dengan harga yang le
   ```sql
   SELECT hostgroup_id, hostname, status FROM runtime_mysql_servers;
   ```
-  ![alt](/proxystop.png)
+  ![alt](/images/proxystop.png)
   Pada gambar di atas, ip milik proxy `192.168.16.94` memiliki status `SHUNNED`
   
 ### Mencoba Insert Data
-![alt](/insert.png)
+![alt](/images/insert.png)
 ### Menjalankan Kembali MySQL pada db3
 * Masuk ke db3
   ```bash
@@ -663,16 +663,16 @@ MyBuffet adalah sebuah aplikasi untuk menjual makanan hotel dengan harga yang le
   sudo service mysql start
   sudo service mysql status
   ```
-  ![alt](/startsql.png)
+  ![alt](images/startsql.png)
 * Masuk ke mysql
   ```bash
   mysql -u mybuffet -p123
   ```
-  ![alt](/mysql.png)
+  ![alt](/images/mysql.png)
 * Jalankan query berikut untuk mengecek apakah data terreplikasi
   ```sql
   use mybuffet;
   select * from menu_restaurants \G;
   ```
-  ![alt](/replikasi.png)
+  ![alt](/images/replikasi.png)
   Pada gambar diatas terlihat bahwa isi database pada server db3 sudah sama dengan data terakhir pada aplikasi.
