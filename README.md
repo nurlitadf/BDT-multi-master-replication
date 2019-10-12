@@ -649,7 +649,7 @@ MyBuffet adalah sebuah aplikasi untuk menjual makanan hotel dengan harga yang le
   SELECT hostgroup_id, hostname, status FROM runtime_mysql_servers;
   ```
   ![alt](/images/proxystop.png)
-  Pada gambar di atas, ip milik proxy `192.168.16.94` memiliki status `SHUNNED`
+  Pada gambar di atas, ip milik db3 `192.168.16.94` memiliki status `SHUNNED`
   
 ### Mencoba Insert Data
 ![alt](/images/insert.png)
