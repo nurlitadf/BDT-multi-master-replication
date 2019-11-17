@@ -686,19 +686,30 @@
     * NodeJS
   * CRUD
     * Create
+
     ![API Create](/tugas-mongodb/images/create.png)
     * Read
+
     ![API Read](/tugas-mongodb/images/read.png)
     * Update
+
     ![API Update](/tugas-mongodb/images/update.png)
+
     Setelah update:
+
     ![Data Setelah Update](/tugas-mongodb/images/after.png)
+
     * Delete
+
     ![API Delete](/tugas-mongodb/images/delete.png)
+
     Setelah delete:
+
     ![Data Setelah delete](/tugas-mongodb/images/null.png)
   * Aggregation Query
     * Count berdasarkan year
+
     ![Count](/tugas-mongodb/images/cnt.png)
     * Distinct state
+
     ![Distinct](/tugas-mongodb/images/distinct.png)
