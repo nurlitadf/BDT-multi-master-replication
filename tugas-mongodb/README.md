@@ -580,7 +580,7 @@
     ```bash
     rs.status()
     ```
-    ![Hasil replica set](/images/replicaset.png)
+    ![Hasil replica set](/tugas-mongodb/images/replicaset.png)
 
 * Membuat user administrative
   * Masuk ke salah satu server config
@@ -674,31 +674,31 @@
     ```bash
     db.forestfireCollection.count()
     ```
-    ![Hasil count](/images/count.png)
+    ![Hasil count](/tugas-mongodb/images/count.png)
   * Melihat distribusi shard
     ```bash
     db.forestfireCollection.getShardDistribution()
     ```
-    ![Distribusi shard](/images/shard.png)
+    ![Distribusi shard](/tugas-mongodb/images/shard.png)
 * Uji coba menggunakan API
   * Teknologi yang dibutuhkan
     * Postman
     * NodeJS
   * CRUD
     * Create
-    ![API Create](/images/create.png)
+    ![API Create](/tugas-mongodb/images/create.png)
     * Read
-    ![API Read](/images/read.png)
+    ![API Read](/tugas-mongodb/images/read.png)
     * Update
-    ![API Update](/images/update.png)
+    ![API Update](/tugas-mongodb/images/update.png)
     Setelah update:
-    ![Data Setelah Update](/images/after.png)
+    ![Data Setelah Update](/tugas-mongodb/images/after.png)
     * Delete
-    ![API Delete](/images/delete.png)
+    ![API Delete](/tugas-mongodb/images/delete.png)
     Setelah delete:
-    ![Data Setelah delete](/images/null.png)
+    ![Data Setelah delete](/tugas-mongodb/images/null.png)
   * Aggregation Query
     * Count berdasarkan year
-    ![Count](/images/cnt.png)
+    ![Count](/tugas-mongodb/images/cnt.png)
     * Distinct state
-    ![Distinct](/images/distinct.png)
+    ![Distinct](/tugas-mongodb/images/distinct.png)
