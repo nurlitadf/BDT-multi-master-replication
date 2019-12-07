@@ -206,32 +206,32 @@
 ### Pemanfaatan Database pada API CRUD
 * Create
   
-    ![Create](/img/create.png)
+    ![Create](/tugas-eas/img/create.png)
 
 * Read
 
-    ![Read](/img/read.png)
+    ![Read](/tugas-eas/img/read.png)
 
 * Update
     
-    ![Update](/img/update.png)
+    ![Update](/tugas-eas/img/update.png)
 
 * Delete
 
-    ![Read](/img/delete.png)
+    ![Read](/tugas-eas/img/delete.png)
 
 ### Uji Performa API
 
 #### JMeter
 
 * 100
-  ![JMeter 100](/img/100.png)
+  ![JMeter 100](/tugas-eas/img/100.png)
 
 * 500
-  ![JMeter 500](/img/500.png)
+  ![JMeter 500](/tugas-eas/img/500.png)
 
 * 1000
-  ![JMeter 1000](/img/1000.png)
+  ![JMeter 1000](/tugas-eas/img/1000.png)
 
 #### Sysbench
 
@@ -365,7 +365,7 @@ Dapat dilihat dari hasil di atas bahwa semakin banyak PD semakin baik performany
   ```bash
   curl http://192.168.16.92:2379/pd/api/v1/members
   ```
-  ![Fail Over](/img/failover_1.png)
+  ![Fail Over](/tugas-eas/img/failover_1.png)
 * Matikan pd pada host leader
   ```bash
   vagrant ssh node1
@@ -376,12 +376,12 @@ Dapat dilihat dari hasil di atas bahwa semakin banyak PD semakin baik performany
   ```
   sudo kill -9 [pid pd]
   ```
-  ![Fail Over](/img/kill.png)
+  ![Fail Over](/tugas-eas/img/kill.png)
 * Cek Leader Baru
   ```bash
   curl http://192.168.16.93:2379/pd/api/v1/members
   ```
-  ![Fail Over](/img/failover_2.png)
+  ![Fail Over](/tugas-eas/img/failover_2.png)
 Leader berpindah dari `pd1` ke `pd3`
 
 ### Monitoring Menggunakan Grafana
@@ -519,16 +519,16 @@ Leader berpindah dari `pd1` ke `pd3`
     url = https://grafana.net
   ```
 * Masuk ke grafana dengan mengakses `192.168.16.92:3000` pada browser
-  ![Grafana](/img/grafana.png)
+  ![Grafana](/tugas-eas/img/grafana.png)
 * Login menggunakan username `admin` password `admin`.
 * Pada home dashboard click tombol `Create yout first data source`
 * Klik `Prometheus` pada `Time series databases`
-  ![Grafana](/img/grafana_prometheus.png)
+  ![Grafana](/tugas-eas/img/grafana_prometheus.png)
 * Masukkan `http://192.168.16.92:9090` pada form URL di bagian HTTP lalu klik `Save & Test`
 * Buat dashboard baru dengan cara import lalu masukkan file `grafana/pd.json`, `grafana/tidb.json`, dan `grafana/tikv_summary.json`
 * Tampilan Dashboard PD
-  ![Grafana PD](/img/grafana-pd.png)
+  ![Grafana PD](/tugas-eas/img/grafana-pd.png)
 * Tampilan Dashboard TiDB
-  ![Grafana TiDB](/img/grafana-tidb.png)
+  ![Grafana TiDB](/tugas-eas/img/grafana-tidb.png)
 * Tampilan Dashboard TiKV
-  ![Grafana TiKV](/img/grafana-tikv.png)
+  ![Grafana TiKV](/tugas-eas/img/grafana-tikv.png)
